@@ -1,6 +1,7 @@
 class powerup extends gameObject {
   float x;
   float y;
+  int powerUPcooldown = 200;
   int powerup;
   final int gravity=4;
   final int speed=1;
@@ -54,7 +55,7 @@ class powerup extends gameObject {
         } else if (powerup == rockets) {
           player.powerup = rockets;
         }
-        player.powercooldown=200;
+        player.powercooldown=powerUPcooldown;
         lives=0;
       }
     }
