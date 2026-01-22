@@ -2,7 +2,13 @@ class Spaceship extends gameObject {
   PVector dir;
   int bulletcooldown;
   int teleportcooldown;
+  int powercooldown;
   int invincibility;
+  int powerup=0;
+  final int nothing=0;
+  final int speed=1;
+  final int shotgun=2;
+  final int rockets = 3;
 
   Spaceship() {
     super(width/2, height/2, 0, 0);
@@ -20,16 +26,31 @@ class Spaceship extends gameObject {
 
   void show() {
     bulletcooldown--;
+    if (powercooldown>0) {
+      powercooldown--;
+    } else if (powercooldown<=0){
+      powerup = nothing;
+    }
     if (teleportcooldown>0) {
       teleportcooldown--;
     }
     if (invincibility>0) {
       invincibility--;
     }
-    if (spaceKey && bulletcooldown <= 0) {
+    if (spaceKey && bulletcooldown <= 0&& powerup != shotgun && powerup != rockets) {
       objects.add(new Bullet());
       bulletcooldown = 15;
       glowC = color(245, 245, 66);
+    } else if (spaceKey && bulletcooldown <= 0&&powerup==shotgun) {
+      objects.add(new Bullet());
+      objects.add(new Bullet(player.loc.x, player.loc.y, player.dir.heading()+0.5));
+      objects.add(new Bullet(player.loc.x, player.loc.y, player.dir.heading()-0.5));
+      bulletcooldown = 15;
+      glowC = color(245, 245, 66);
+    } else if (spaceKey && bulletcooldown <= 0&&powerup==rockets) {
+      glowC = color(252, 140, 3);
+      objects.add(new rocket());
+      bulletcooldown = 45;
     }
 
     if (teleportKey && teleportcooldown <= 0) {
@@ -72,13 +93,22 @@ class Spaceship extends gameObject {
 
   void perform() {
     loc.add(velo);
-    velo.limit(5);
+    if (powerup!=speed) {
+      velo.limit(5);
+    } else if (powerup==speed) {
+      velo.limit(10);
+    }
 
     if (leftKey) dir.rotate(-PI/24);
     if (rightKey) dir.rotate(PI/24);
     if (upKey) {
-      velo.add(dir);
-      objects.add(new particle(loc.x-2*velo.x,loc.y-2*velo.y));
+      if (mode!=speed) {
+        velo.add(dir);
+      } else if (mode==speed) {
+        velo.add(dir);
+        velo.mult(1.1);
+      }
+      objects.add(new particle(loc.x-2*velo.x, loc.y-2*velo.y));
     }
     if (downKey) velo.mult(0.85);
   }

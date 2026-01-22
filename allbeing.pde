@@ -19,6 +19,13 @@ class gameObject {
     lives = lv;
   }
 
+  gameObject(float lx, float ly,float di) {
+    loc = new PVector(lx, ly);
+    velo = new PVector(0,1);
+    velo.setHeading(di);
+    lives = 1;
+  }
+
   void show() {
   }
 
@@ -36,36 +43,50 @@ class gameObject {
   }
 
   void glow() {
-    glowC = color(90, 234, 233);
+    //if (lives<=0) {
+    //} else {
+      glowC = color(90, 234, 233);
 
-    //default glow is cyan
+      //default glow is cyan
 
-    if (this instanceof ufo) { //set glow color
-      glowC = color(51, 255, 58);
-    } else if (this instanceof particle){
-      glowC = color(random(200,255),random(150),0);
-    }
+      if (this instanceof ufo) { //set glow color
+        glowC = color(51, 255, 58);
+      } else if (this instanceof particle) {
+        glowC = color(random(200, 255), random(150), 0);
+      }
 
-    for (int i =0; i<5; i++) {
-      pushMatrix();
+      for (int i =0; i<5; i++) {
+        pushMatrix();
 
-      if (this instanceof Asteroid || this instanceof Bullet || this instanceof ufo || this instanceof evilBullet) {
-        if (this instanceof evilBullet) {
-          glowC = color(51, 255, 58);
+        if (this instanceof Asteroid || this instanceof Bullet || this instanceof ufo || this instanceof evilBullet||this instanceof rocket) {
+          if (this instanceof evilBullet) {
+            glowC = color(51, 255, 58);
+          }
+          if (this instanceof rocket){
+            glowC = color(252, 140, 3);
+          }
+          translate(loc.x+velo.x, loc.y+velo.y); //glow effect for objects with velocity
+        } else {
+          if (this instanceof powerup) {
+            glowC = color(255, 0, 255);
+          }
+          if (this instanceof gravdisplay) {
+            glowC = color(155, 78, 222);
+          }
+          translate(loc.x, loc.y); //glow effect for nonmoving objects
         }
-        translate(loc.x+velo.x, loc.y+velo.y); //glow effect for objects with velocity
-      } else {
-        translate(loc.x, loc.y); //glow effect for nonmoving objects
-      }
 
-      if (this instanceof Spaceship && player.invincibility > 0) {
-        objectShape(map(i, 0, 5, 125, 5), strokeW+(i*2.5));
-      } else if (this instanceof particle){
-        objectShape(map(i, 0, 5, 125, 5), strokeW+(i*1));
-      } else {
-        objectShape(map(i, 0, 5, 125, 5), strokeW+(i*2.5)); //object stroke -> 5x object stroke
-      }
-      popMatrix();
+        if (this instanceof Spaceship && player.invincibility > 0) {
+          objectShape(map(i, 0, 5, 125, 5), strokeW+(i*2.5));
+        } else if (this instanceof particle) {
+          objectShape(map(i, 0, 5, 125, 5), strokeW+(i*1));
+        } else if (this instanceof gravdisplay) {
+          objectShape(25, strokeW+(i*2.5));
+        } else {
+          objectShape(map(i, 0, 5, 125, 5), strokeW+(i*2.5)); //object stroke -> 5x object stroke
+        }
+        popMatrix();
+      //}
     }
   }
 }

@@ -22,11 +22,14 @@ class Asteroid extends gameObject {
   }
 
   void show() {
-    pushMatrix();
-    translate(loc.x, loc.y);
-    rotate(dir);
-    objectShape(255, strokeW);
-    popMatrix();
+    //if (lives<=0) {
+    //} else {
+      pushMatrix();
+      translate(loc.x, loc.y);
+      rotate(dir);
+      objectShape(255, strokeW);
+      popMatrix();
+    //}
   }
 
   void objectShape(float opacity, float strokesize) {
@@ -41,6 +44,7 @@ class Asteroid extends gameObject {
 
   void act() {
     loc.add(velo);
+    velo.limit(2);
     warp();
     collision();
     dir+=0.010;
@@ -49,10 +53,10 @@ class Asteroid extends gameObject {
   void collision() {
     for (int i = 0; i < objects.size(); i++) {
       gameObject obj = objects.get(i);
-      if (obj instanceof Bullet) {
+      if (obj instanceof Bullet || obj instanceof rocket) {
         if (dist(loc.x, loc.y, obj.loc.x, obj.loc.y) < d + obj.d/2) {
-          objects.add(new Asteroid(loc.x, loc.y, lives-1));
-          objects.add(new Asteroid(loc.x, loc.y, lives-1));
+          objects.add(new Asteroid(loc.x, loc.y, this.lives-1));
+          objects.add(new Asteroid(loc.x, loc.y, this.lives-1));
           //shake setup
           shake = obj.velo.copy();
           shake.x *= 2*lives;

@@ -19,16 +19,16 @@ void keyReleased() {
 void mouseReleased() {
   if (mode == INTRO) {
     mode = GAME;
-    asteroids_total = 5;
-    ufo_total = 2;
+    asteroids_total = 8;
+    ufo_total = 3;
     
   } else if (mode == GAME_OVER) {
     mode = GAME;
     objects.clear();
     player = new Spaceship();
     objects.add(player);
-    asteroids_total = 5;
-    ufo_total = 2;
+    asteroids_total = 8;
+    ufo_total = 3;
     
   }
 }

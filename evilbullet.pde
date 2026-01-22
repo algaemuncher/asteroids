@@ -30,6 +30,7 @@ class evilBullet extends gameObject {
     timer--;
     if (timer == 0) lives = 0;
     collision();
+    velo.limit(2);
   }
 
   void collision() {

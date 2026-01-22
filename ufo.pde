@@ -31,12 +31,13 @@ class ufo extends gameObject {
     warp();
     collision();
     shoot();
+    velo.limit(2);
   }
 
   void collision() {
     for (int i =0; i<objects.size(); i++) {
       gameObject obj = objects.get(i);
-      if (obj instanceof Bullet) {
+      if (obj instanceof Bullet||obj instanceof rocket) {
         if (dist(obj.loc.x, obj.loc.y, loc.x + 18.5, loc.y)< 21.5 || dist(obj.loc.x, obj.loc.y, loc.x - 18.5, loc.y)< 21.5 || dist(obj.loc.x, obj.loc.y, loc.x, loc.y)<18) {
           shake = velo.copy();
           shake.x *= 3;
@@ -58,10 +59,10 @@ class ufo extends gameObject {
           shake.x *= 3;
           shake.y *= 3;
           shakemax = 16;
-          
+
           //ufo count
           ufo_total -= 1;
-          
+
           //damaged
           glowC = color(255, 0, 0);
           obj.glowC = color(255, 0, 0);
